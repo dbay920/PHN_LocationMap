@@ -1,0 +1,329 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta charset='utf-8' />
+	<title>PHN Site Locator</title>
+	<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+	<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.js'></script>
+	<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.css' rel='stylesheet' />
+	<script src="https://use.fontawesome.com/72198d97fa.js"></script>
+	<link rel="stylesheet" href="reset.css">
+	<link rel="stylesheet" href="locations.css">
+	<script src="HealthCenters.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+	<style>
+
+	
+	.listings {
+		font-family: 'Roboto', sans-serif;
+		line-height: 1.5em;
+	}
+	</style>
+</head>
+
+<body>
+	<div id="info">
+	<h1>Click on markers to get location information</h1>
+	</div>
+	<div class='sidebar'>
+		<div class='heading'>
+		  <h1>Our locations</h1>
+		  <a href="#"><h2 id="reset" style="float:right; padding-right:10px;">Reset map</h2></a>
+		</div>
+		<div id='listings' class='listings'>	
+			<input type="checkbox" id="menu1" />
+			<label for="menu1" class='county accordion'>
+				<h2>Ashtabula County</h2>
+			</label>
+				<div id='Ashtabula' class="panel"></div>
+			<input type="checkbox" id="menu2" />
+			<label for="menu2" class='county accordion' >
+				<h2>Beaver County</h2>
+			</label>
+				<div id='Beaver' class="panel"></div>				
+			<input type="checkbox" id="menu3" />
+			<label for="menu3" class='county accordion' >
+				<h2>Blair County</h2>
+			</label>	
+				<div id='Blair' class="panel"></div>
+			<input type="checkbox" id="menu4" />
+			<label for="menu4" class='county accordion' >
+				<h2>Butler County</h2>
+			</label>	
+				<div id='Butler' class="panel"></div>
+			<input type="checkbox" id="menu5" />
+			<label for="menu5" class='county accordion' >
+				<h2>Cambria County</h2>
+			</label>	
+				<div id='Cambria' class="panel"></div>
+			<input type="checkbox" id="menu6" />
+			<label for="menu6" class='county accordion' >
+				<h2>Clarion County</h2>
+			</label>	
+				<div id='Clarion' class="panel"></div>
+			<input type="checkbox" id="menu7" />
+			<label for="menu7" class='county accordion' >
+				<h2>Crawford County</h2>
+			</label>	
+				<div id='Crawford' class="panel"></div>
+			<input type="checkbox" id="menu8" />
+			<label for="menu8" class='county accordion' >
+				<h2>Erie County</h2>
+			</label>	
+				<div id='Erie' class="panel"></div>
+			<input type="checkbox" id="menu9" />
+			<label for="menu9" class='county accordion' >
+				<h2>Indiana County</h2>
+			</label>	
+				<div id='Indiana' class="panel"></div>
+			<input type="checkbox" id="menu10" />
+			<label for="menu10" class='county accordion' >
+				<h2>Jefferson County</h2>
+			</label>	
+				<div id='Jefferson' class="panel"></div>
+			<input type="checkbox" id="menu11" />
+			<label for="menu11" class='county accordion' >
+				<h2>Lawrence County</h2>
+			</label>	
+				<div id='Lawrence' class="panel"></div>
+			<input type="checkbox" id="menu12" />
+			<label for="menu12" class='county accordion' >
+				<h2>Mercer County</h2>
+			</label>	
+				<div id='Mercer' class="panel"></div>
+			<input type="checkbox" id="menu13" />
+			<label for="menu13" class='county accordion' >
+				<h2>Mifflin County</h2>
+			</label>	
+				<div id='Mifflin' class="panel"></div>
+			<input type="checkbox" id="menu14" />
+			<label for="menu14" class='county accordion' >
+				<h2>Northumberland County</h2>
+			</label>	
+				<div id='Northumberland' class="panel"></div>
+			<input type="checkbox" id="menu15" />
+			<label for="menu15" class='county accordion' >
+				<h2>Schuylkill County</h2>
+			</label>	
+				<div id='Schuylkill' class="panel"></div>
+			<input type="checkbox" id="menu16" />
+			<label for="menu16" class='county accordion' >
+				<h2>Trumbull County</h2>
+			</label>	
+				<div id='Trumbull' class="panel"></div>
+			<input type="checkbox" id="menu17" />
+			<label for="menu17" class='county accordion' >
+				<h2>Warren County</h2>
+			</label>	
+				<div id='Warren' class="panel"></div>
+		</div>
+	</div>  	
+	<div id='map' class='map'></div>
+	<nav id='filter-group' class='filter-group'></nav>  
+	<script>
+
+	var filterGroup = document.getElementById('filter-group');
+	
+	mapboxgl.accessToken = 'pk.eyJ1IjoiZGF2YmF5IiwiYSI6ImNqMGI0a3h1dzAyZmczM3BnNWYzOTFlbGMifQ.zjWA1_WS3hazijZlfXG9zg';
+
+	// This adds the map to your page
+	var map = new mapboxgl.Map({
+		// container id specified in the HTML
+		container: 'map', 
+		// style URL
+		style: 'mapbox://styles/davbay/cj0nv46if003p2sns7adn472n',
+		center: [-78.350, 40.942],
+		zoom: 7.1,
+		pitch: 15
+	});
+		
+	// This sorts site-locations.js alphabetically
+	var sortArray = HealthCenters['features'];
+	sortArray.sort(function(a,b) {
+		if ( a.properties.title < b.properties.title )
+			return -1;
+		if ( a.properties.title > b.properties.title )
+			return 1;
+		return 0;
+	});
+	
+	// This adds the data to the map
+	map.on('load', function (e) {
+		map.addSource('HealthCenters', {
+			type: 'geojson',
+			data: HealthCenters
+		});
+	HealthCenters.features.forEach(function(feature) {
+		var locationType = feature.properties['type'];
+        var symbol = feature.properties['icon'];
+        var layerID = 'poi-' + symbol;
+
+        // Add a layer for this symbol type if it hasn't been added already.
+        if (!map.getLayer(layerID)) {
+            map.addLayer({
+                "id": layerID,
+                "type": "symbol",
+                "source": "HealthCenters",
+                "layout": {
+                    "icon-image": symbol + "-15",
+                    "icon-allow-overlap": true
+                },
+                "filter": ["==", "icon", symbol]
+            });
+
+            // Add checkbox and label elements for the layer.
+            var input = document.createElement('input');
+            input.type = 'checkbox';
+            input.id = layerID;
+            input.checked = true;
+            filterGroup.appendChild(input);
+
+            var label = document.createElement('label');
+            label.setAttribute('for', layerID);
+            label.textContent = locationType;
+            filterGroup.appendChild(label);
+
+            // When the checkbox changes, update the visibility of the layer.
+            input.addEventListener('change', function(e) {
+                map.setLayoutProperty(layerID, 'visibility',
+                    e.target.checked ? 'visible' : 'none');
+            });
+			
+		// This intiates popup and flyTo animation on map when location icon is clicked
+		map.on('click', function(e) {
+			var features = map.queryRenderedFeatures(e.point, {
+				layers: [layerID]
+			});
+			if (features.length) {    // Change the cursor to a pointer when the mouse is over the places layer.
+				var clickedPoint = features[0];
+				// 1. Fly to the point
+				flyToStore(clickedPoint);
+				// 2. Close all other popups and display popup for clicked store
+				createPopUp(clickedPoint);
+				// 3. Highlight listing in sidebar (and remove highlight for all other listings)
+				var activeItem = document.getElementsByClassName('active');
+				if (activeItem[0]) {
+					activeItem[0].classList.remove('active');
+				}
+				var selectedFeature = clickedPoint.properties.title;      
+				for (var i = 0; i < HealthCenters.features.length; i++ ) {
+					if (HealthCenters.features[i].properties.title === selectedFeature) {
+						selectedFeatureIndex = i;
+					}
+				}
+				var listing = document.getElementById('listing-' + selectedFeatureIndex);
+				listing.classList.add('active');
+			}
+		});					
+        }
+    });		
+		// Initialize the list
+		buildLocationList(HealthCenters);
+	
+	function flyToStore(currentFeature) {
+		map.flyTo({
+		  center: currentFeature.geometry.coordinates,
+		  zoom: 15
+		});
+	}
+
+	// Fly to original map position and zoom
+	document.getElementById('reset').addEventListener('click', function () {
+		map.flyTo({
+		center: [-78.350, 40.942],
+		zoom: 7.1
+		});
+	});
+	
+	// Add location properties (title, link, address) to popup
+	function createPopUp(currentFeature) {		
+		var popUps = document.getElementsByClassName('mapboxgl-popup');
+		if (popUps[0]) popUps[0].remove();
+		var popup = new mapboxgl.Popup({			
+			closeButton: true
+			})
+		.setLngLat(currentFeature.geometry.coordinates)	
+		.setHTML(
+		'<h3><a style="color:#fff;" target="_blank" href="' + currentFeature.properties.link + '">' + currentFeature.properties.title + ' ' + '<i class="fa fa-external-link" aria-hidden="true"></i></a></h3>'
+		+ '<img src="' + currentFeature.properties.image + '" style="width:360px;">' + '<h4>' + '<i class="fa fa-map-marker" aria-hidden="true"></i>' + ' ' + '<a class="linkPopup" target="_blank" href=' + currentFeature.properties.directions + '>' 
+		+ currentFeature.properties.address + '</a>' + '<br/><i class="fa fa-phone" aria-hidden="true"></i>' + ' ' + '<a href="tel:' + currentFeature.properties.phoneLink + '">' + currentFeature.properties.phone + '</a>' + '</h4>' )
+		.setLngLat(currentFeature.geometry.coordinates)
+		.addTo(map);
+	}
+
+	
+	
+	// Build location list and add to sidebar
+	function buildLocationList(data) {    		
+		for (i = 0; i < data.features.length; i++) {	
+			// Create an array of all the locations and their properties
+			var currentFeature = data.features[i];	 
+			// Shorten data.feature.properties to just `prop` so we're not
+			// writing this long form over and over again.
+			var prop = currentFeature.properties;
+			// Loop through list of divs with class 'county' and then sort locations accordingly
+			var counties = document.getElementsByClassName('panel');
+			for (var p = 0; p < counties.length; p++){
+				if (prop.county === counties[p].id){
+					// Select the listing container in the HTML
+					// Append a div with the class 'item' for each location 
+					var listing = document.createElement("div");
+					listing.className = 'item';
+					listing.id = "listing-" + i;
+					// Add title and link to map location
+					var link = listing.appendChild(document.createElement('a'));
+					link.href = '#';
+					link.className = 'title';
+					link.dataPosition = i;
+					link.innerHTML = prop.title + ' ' + '<i class="fa fa-search" aria-hidden="true"></i>';	  
+					// Add adress and phone details to each listing
+					var details = listing.appendChild(document.createElement('div'));
+					details.innerHTML = '<i class="fa fa-map-marker" aria-hidden="true"></i>' + ' ' + '<a href=' + prop.directions + '>' + prop.address + '</a>';
+					if (prop.phone) {
+					details.innerHTML += '<br/><i class="fa fa-phone" aria-hidden="true"></i>' + ' ' + '<a href="tel:' + prop.phoneLink + '">' + prop.phone + '</a>';
+					}
+					// Add each listing to sidebar by county name
+					document.getElementById(counties[p].id).appendChild(listing);			
+				}
+			}
+			link.addEventListener('click', function(e) {
+				// Update the currentFeature to the location associated with the clicked link
+				var clickedListing = data.features[this.dataPosition];
+				// 1. Fly to the point associated with the clicked link
+				flyToStore(clickedListing);
+				// 2. Close all other popups and display popup for clicked location
+				createPopUp(clickedListing);
+				// 3. Highlight listing in sidebar (and remove highlight for all other listings)
+				var activeItem = document.getElementsByClassName('active');
+				if (activeItem[0]) {
+					activeItem[0].classList.remove('active');
+				}
+				this.parentNode.classList.add('active');
+			});	
+		}
+	}
+
+	var acc = document.getElementsByClassName("county");
+	var i;
+
+	for (i = 0; i < acc.length; i++) {
+		acc[i].onclick = function(){
+			/* Toggle between adding and removing the "active" class,
+			to highlight the button that controls the panel */
+			this.classList.toggle("active");
+
+			/* Toggle between hiding and showing the active panel */
+			var panel = this.nextElementSibling;
+			if (panel.style.display === "block") {
+				panel.style.display = "none";
+			} else {
+				panel.style.display = "block";
+			}
+		}
+	}
+
+	});		
+	
+	</script>
+</body>
+</html>
